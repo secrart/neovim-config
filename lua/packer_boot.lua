@@ -11,7 +11,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-function packerBootstrap(loader)
+function on_packer_bootstrap(loader)
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   loader(use)
