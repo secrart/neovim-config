@@ -1,4 +1,5 @@
 local boot = require("packer_boot")
+local civit = require("civit_cmake")
 
 on_packer_bootstrap(function(use)
 
@@ -25,11 +26,24 @@ on_packer_bootstrap(function(use)
             	vim.g.WebDevIconsUnicodeDecorateFolderNodes = 1
         	end
     	}
+	
+	use {
+  		'Civitasv/cmake-tools.nvim',
+  		requires = {
+    			'nvim-lua/plenary.nvim', -- Dependency
+		},
+  		config = basic_civit_cmake
+		}
+	
+	use {
+    		'nvim-treesitter/nvim-treesitter',
+    		run = ':TSUpdate' -- Automatically install language parsers
+  	}
 
 end)
 
 function func_jay_setup_nvim(args)
-	
+	vim.cmd("CocInstall coc-cmake")	
 	vim.cmd("CocInstall coc-clangd")
 	vim.cmd("CocConfig")
 	vim.cmd("PackerInstall")
@@ -69,8 +83,16 @@ require('lualine').setup {
   extensions = {}
 }
 
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all", -- Or specify languages you want
+  highlight = {
+    enable = true,              -- Enable Treesitter-based highlighting
+  },
+}
 
+vim.api.nvim_set_keymap('n', '<C-r>', ':!./build.sh<CR>', {noremap = true, silent = true})
 vim.opt.number = true
 vim.cmd('colorscheme gruvbox')
 vim.g.gruvbox_contrast_dark = 'hard'  -- for a little more contrast
 vim.cmd('autocmd VimEnter * NERDTree')
+vim.cmd('PackerInstall')
